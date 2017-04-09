@@ -1,5 +1,8 @@
 import math
 import datafiled as df
+import tensorflow as tf
+
+from utils import *
 from keras.models import Sequential, Model
 from keras.layers import Lambda, Cropping2D
 from keras.layers.core import Dense, Activation, Flatten, Dropout, Lambda
@@ -17,19 +20,19 @@ def end2endNiv():
 
     # In: 64x64
     #Convo. layer
-    model.add(Conv2D(24,(5,5),activation = 'elu') )
+    model.add(Conv2D(24,5,5,activation = 'elu') )
     model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
-    model.add(Conv2D(36,(5,5),activation = 'elu'))
+    model.add(Conv2D(36,5,5,activation = 'elu'))
     model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
-    model.add(Conv2D(48,(5,5),activation = 'elu'))
+    model.add(Conv2D(48,5,5,activation = 'elu'))
     model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
-    model.add(Conv2D(64,(3,3),activation = 'elu'))
+    model.add(Conv2D(64,3,3,activation = 'elu'))
     model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
