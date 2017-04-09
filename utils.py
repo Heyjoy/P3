@@ -1,5 +1,6 @@
 import csv
-import datafiled
+import datafiled as df
+from sklearn.model_selection import train_test_split
 
 def getTrainDate():
     samples = []
@@ -9,6 +10,6 @@ def getTrainDate():
             if (line[0] != 'center'):
                 samples.append(line)
 
-    train_samples, validation_samples = train_test_split(samples, test_size=TrainTestSplitSize)
+    train_samples, validation_samples = train_test_split(samples, test_size=df.TrainTestSplitSize)
 
     return train_samples, validation_samples
