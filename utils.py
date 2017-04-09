@@ -3,7 +3,7 @@ import datafiled
 
 def getTrainDate():
     samples = []
-    with open('./data/driving_log.csv') as csvfile:
+    with open('../data/driving_log.csv') as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
             if (line[0] != 'center'):
