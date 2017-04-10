@@ -12,7 +12,7 @@ history_object = model.fit_generator(train_generator,
                                      validation_data=validation_generator,
                                      validation_steps= len(validation_samples),
                                      epochs=3,
-                                     verbose =1)
+                                     verbose =2)
 
 model.save('model.h5')
 plotHistroy(history_object)
