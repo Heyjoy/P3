@@ -16,4 +16,4 @@ history_object = model.fit_generator(train_generator,
                                      nb_epoch=3,
                                      verbose =1)
 model.save('model.h5')
-plotHistroy(history_object)
+utils.plotHistroy(history_object)
