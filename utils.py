@@ -8,6 +8,7 @@ import datafiled as df
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
+import matplotlib.pyplot as plt
 
 def getTrainDate():
     samples = []
@@ -58,10 +59,10 @@ def generator(samples,batch_size=32):
                 if (right_angle<-1):
                     right_angle = -1
 
-                #images.extend([center_image,left_image,right_image])
-                #angles.extend([center_angle,left_angle,right_angle] )
-                images.extend([center_image])
-                angles.extend([center_angle])
+                images.extend([center_image,left_image,right_image])
+                angles.extend([center_angle,left_angle,right_angle] )
+                #images.extend([center_image])
+                #angles.extend([center_angle])
                 #print(path+batch_sample[0].split('\\')[-1])
                 #print(center_image)
 
@@ -72,14 +73,15 @@ def generator(samples,batch_size=32):
                 augmented_images.append(cv2.flip(image,1))
                 augmented_angles.append(angle*-1.0)
             # trim image to only see section with road
-            #X_train = np.array(augmented_images)
-            #y_train = np.array(augmented_angles)
-            X_train = np.array(images)
-            y_train = np.array(angles)
+            X_train = np.array(augmented_images)
+            y_train = np.array(augmented_angles)
+            #X_train = np.array(images)
+            #y_train = np.array(angles)
             yield sklearn.utils.shuffle(X_train, y_train)
 
 def normalize(image):
     return image / 127.5 - 1
 
 def resize(image):
-    return tf.image.resize_images(image, [64, 64])
+    from keras.backend import tf as ktf
+    return ktf.image.resize_images(image, [64, 64])
