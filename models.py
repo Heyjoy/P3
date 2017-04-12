@@ -11,10 +11,10 @@ from keras.layers.pooling import MaxPooling2D
 
 def end2endNiv():
     model = Sequential()
-    crop_bottom = math.floor(df.imgShape[0]/6)
+    crop_bottom = math.floor(df.ImgShape[0]/6)
     crop_top = crop_bottom * 2
 
-    model.add(Cropping2D(cropping=((crop_top, crop_bottom), (0, 0)), input_shape=df.imgShape, name='input'))
+    model.add(Cropping2D(cropping=((crop_top, crop_bottom), (0, 0)), input_shape=df.ImgShape, name='input'))
     model.add(Lambda(resize))
     model.add(Lambda(normalize))
 
@@ -36,7 +36,7 @@ def end2endNiv():
     model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
-    #model.add(Conv2D(128, (3, 3),activation='relu'))
+    #model.add(Conv2D(128, 3, 3,activation='relu'))
 
     model.add(Flatten())
     model.add(Dropout(0.5))
