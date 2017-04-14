@@ -12,20 +12,19 @@ import matplotlib.pyplot as plt
 
 def getTrainDate():
     samples = []
-    with open('../data/driving_log.csv') as csvfile:
+    count = 0
+    with open(df.CSVPath) as csvfile:
         reader = csv.reader(csvfile)
         for line in reader:
-            if (line[3]==0):
-                count=count+1
-            if (count >3):
-                count=0
-            if (line[0] != 'center'):
-                samples.append(line)
-
-
-
+            if (line[0] != 'center' ):
+                if(line[3] == ' 0' and count!=3):
+                    count += 1
+                elif(line[3] == ' 0' and count>=3):
+                    count = 0
+                    samples.append(line)
+                else:
+                    samples.append(line)
     train_samples, validation_samples = train_test_split(samples, test_size=df.TrainTestSplitSize)
-
     return train_samples, validation_samples
 
 ### plot the training and validation loss for each epoch
@@ -49,7 +48,7 @@ def generator(samples,batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                path = '../data/IMG/'
+                path = df.IMGPath
                 center_image = cv2.imread(path+os.path.split(batch_sample[0])[-1])
                 left_image = cv2.imread(path+os.path.split(batch_sample[1])[-1])
                 right_image = cv2.imread(path+os.path.split(batch_sample[2])[-1])
@@ -59,11 +58,11 @@ def generator(samples,batch_size=32):
                 #if (center_angle == 1) or(center_angle == -1):
                 #   center_angle = center_angle*0.9
                 left_angle = center_angle*1.1
-                if (left_angle > 1):
-                    left_angle = 1
+                '''if (left_angle > 1):
+                    left_angle = 1'''
                 right_angle = center_angle*0.9
-                if (right_angle<-1):
-                    right_angle = -1
+    '''            if (right_angle<-1):
+                    right_angle = -1'''
 
                 images.extend([center_image,left_image,right_image])
                 angles.extend([center_angle,left_angle,right_angle] )
