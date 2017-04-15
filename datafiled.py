@@ -15,7 +15,12 @@ IMGPath = '../data/IMG/'
 CSVPath = '../data/driving_log.csv'
 ImgShape = [160, 320, 3]
 ResizedShape = [64, 64, 3]
-cropBottom = math.floor(ImgShape[0]/6)
+cropBottom = math.floor(ImgShape[0]/6) #
 cropTop = cropBottom * 2
 FilpProb = 0.5
 RandomBrightOffset = 0.25
+
+x_tr_range = ImgShape[1]/50 # 320 = 6.4*50
+y_tr_range = ImgShape[0]/25 # 160 = 6.4 *25
+
+trShiftAngle = 0.4

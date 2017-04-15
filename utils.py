@@ -90,8 +90,21 @@ def getImage(batch_sample):
 def process_image(image, angle):
     # for ru
     image = random_bright(image)
+    image, angle = random_translate(image,angle)
     image, angle = random_flip(image, angle)
     return image,angle
+
+def random_translate(image, angle):
+    tr_x = df.x_tr_range*np.random.uniform()-df.x_tr_range/2
+    angle_tr = angle + tr_x/df.x_tr_range*df.trShiftAngle
+
+    tr_y = df.y_tr_range* np.random.uniform() - df.y_tr_range/2
+    Tr_M = np.float32([[1, 0, tr_x], [0, 1, tr_y]]) # translate Martix.
+    image_tr = cv2.warpAffine(image,Tr_M,(df.ImgShape[1],df.ImgShape[0]))
+
+    return image_tr, angle_tr
+
+
 def random_bright(image):
      res = cv2.cvtColor(image,cv2.COLOR_RGB2HSV)
      random_brightness =np.random.uniform(df.RandomBrightOffset,1+df.RandomBrightOffset)
