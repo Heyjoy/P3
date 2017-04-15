@@ -95,14 +95,15 @@ def process_image(image, angle):
     return image,angle
 
 def random_translate(image, angle):
-    tr_x = df.x_tr_range*np.random.uniform()-df.x_tr_range/2
-    angle_tr = angle + tr_x/df.x_tr_range*df.trShiftAngle
 
-    tr_y = df.y_tr_range* np.random.uniform() - df.y_tr_range/2
-    Tr_M = np.float32([[1, 0, tr_x], [0, 1, tr_y]]) # translate Martix.
-    image_tr = cv2.warpAffine(image,Tr_M,(df.ImgShape[1],df.ImgShape[0]))
+    x = np.random.uniform(-df.x_trRange, df.x_trRange)
+    y = np.random.uniform(-df.y_trRange, df.y_trRange)
+    angle = angle + (x / df.x_trRange * df.trShiftAngle)
 
-    return image_tr, angle_tr
+    Matrix = np.float32([[1, 0, x], [0, 1, y]]) # translate Matrix
+    res = cv2.warpAffine(image, Matrix, (df.ImgShape[1], df.ImgShape[0]))
+
+    return res , angle
 
 
 def random_bright(image):

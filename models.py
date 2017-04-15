@@ -20,18 +20,19 @@ def end2endNiv():
 
     # In: 64x64
     #Convo. layer
-    model.add(Conv2D(24,5,5,activation = 'elu') )
-    model.add(MaxPooling2D((2,2)))
+    model.add(Conv2D(24,5,5,subsample=(2, 2),activation = 'elu') )
+    #model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
-    model.add(Conv2D(36,5,5,activation = 'elu'))
-    model.add(MaxPooling2D((2,2)))
+    model.add(Conv2D(36,5,5,subsample=(2, 2),activation = 'elu'))
+    #model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
-    model.add(Conv2D(48,5,5,activation = 'elu'))
-    model.add(MaxPooling2D((2,2)))
+    model.add(Conv2D(48,5,5,subsample=(2, 2),activation = 'elu'))
+    #model.add(MaxPooling2D((2,2)))
 
     #Convo. layer
+    model.add(Conv2D(64,3,3,activation = 'elu'))
     model.add(Conv2D(64,3,3,activation = 'elu'))
     #model.add(MaxPooling2D((2,2)))
     #model.add(Conv2D(64,2,2,activation = 'elu'))
@@ -39,12 +40,12 @@ def end2endNiv():
     #model.add(Conv2D(128, 3, 3,activation='relu'))
 
     model.add(Flatten())
-    #model.add(Dropout(0.5))
+    model.add(Dropout(0.5))
     model.add(Dense(1164))
     model.add(Dense(100))
     model.add(Dense(50))
     model.add(Dense(10))
-    model.add(Dropout(0.5))
+    #model.add(Dropout(0.2))
     model.add(Dense(1))
     return model
 def end2endNiv2():

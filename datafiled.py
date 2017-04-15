@@ -3,9 +3,9 @@ import math
 
 # models hyperParmeter
 TrainTestSplitSize = 0.2
-N_EPOCH = 10
+N_EPOCH = 20
 Verbose = 1
-BatchSize = 128
+BatchSize = 64
 zeroSteeringCount = 3
 #GaussianNoiseStddev = 1
 AngleOffset = 0.25
@@ -20,7 +20,7 @@ cropTop = cropBottom * 2
 FilpProb = 0.5
 RandomBrightOffset = 0.25
 
-x_tr_range = ImgShape[1]/50 # 320 = 6.4*50
-y_tr_range = ImgShape[0]/25 # 160 = 6.4 *25
+x_trRange = int(ImgShape[1]/10) # 320 = 6.4*50
+y_trRange = int(ImgShape[0]/10) # 160 = 6.4 *25
 
 trShiftAngle = 0.4
