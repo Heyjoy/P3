@@ -12,9 +12,9 @@ model = models.end2endNiv()
 model.compile(loss='mse', optimizer='adam')
 
 history_object = model.fit_generator(train_generator,
-                                         samples_per_epoch= 6*len(train_samples),
+                                         samples_per_epoch= len(train_samples),
                                          validation_data=validation_generator,
-                                         nb_val_samples= 6*len(validation_samples),
+                                         nb_val_samples= len(validation_samples),
                                          nb_epoch=df.N_EPOCH,
                                          verbose =df.Verbose)
 model.save('model.h5')

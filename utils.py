@@ -37,14 +37,7 @@ def plotHistroy(history_object):
     plt.legend(['training set', 'validation set'], loc='upper right')
     plt.show()
 
-def flipImage(images,angles):
-    augmented_images, augmented_angles = [],[]
-    for image,angle in zip(images, angles):
-        augmented_images.append(image)
-        augmented_angles.append(angle)
-        augmented_images.append(cv2.flip(image,1))
-        augmented_angles.append(angle*-1.0)
-    return augmented_images,augmented_angles
+
 # generator samples for training.
 def generator(samples,batch_size=32):
     num_samples = len(samples)
@@ -56,33 +49,9 @@ def generator(samples,batch_size=32):
             images = []
             angles = []
             for batch_sample in batch_samples:
-                path = df.IMGPath
-                center_image = cv2.imread(path+os.path.split(batch_sample[0])[-1])
-                center_image = cv2.cvtColor(center_image,cv2.COLOR_BGR2YUV)
-
-                left_image = cv2.imread(path+os.path.split(batch_sample[1])[-1])
-                right_image = cv2.imread(path+os.path.split(batch_sample[2])[-1])
-
-                # if have 1 or -1 means -25 or 25, no big turn.
-                center_angle = float(batch_sample[3])
-                #if (center_angle == 1) or(center_angle == -1):
-                #   center_angle = center_angle*0.9
-                left_angle = center_angle+df.AngleOffset
-                if left_angle>1:
-                    left_angle = 1
-                right_angle = center_angle-df.AngleOffset
-                if right_angle < -1:
-                    right_angle = -1
-
-                #images.extend([center_image,left_image,right_image])
-                #angles.extend([center_angle,left_angle,right_angle])
-                images.extend([center_image])
-                angles.extend([center_angle])
-                #print(path+batch_sample[0].split('\\')[-1])
-                #print(center_image)
-
-            images,angles = flipImage(images,angles)
-
+                image,angle = getImage(batch_sample)
+                images.extend([image])
+                angles.extend([angle])
             X_train = np.array(images)
             y_train = np.array(angles)
             yield shuffle(X_train, y_train)
@@ -93,20 +62,44 @@ def normalize(image):
 def resize(image):
     from keras.backend import tf as ktf
     return ktf.image.resize_images(image, [64, 64])
+def getImage(batch_sample):
+    path = df.IMGPath
 
-'''def plotHistogram(samples):
-    from collections import Counter
-    plt.figure(figsize=(16,5))
-    D = len(samples)
-    classes = [int(i) for i in range(n_classes)]
-    y_pos = np.arange(samples)
-    count = [D[i] for i in range(n_classes)]
-
-    plt.bar(y_pos, count, align='center', alpha=0.5)
-    plt.xticks(y_pos, classes)
-    plt.xlabel('Label number')
-    plt.ylabel('Samples number')
-    plt.title('Training Set Class Distribution')
-    plt.savefig("./Report_image/class_distribution.png")
-    plt.show()
-    print("end")'''
+    #image = cv2.cvtColor(image,cv2.COLOR_BGR2YUV)
+    # random choose Left Center Right, each 30%
+    diceLCR = np.random.randint(0, 3)
+    # Center
+    if diceLCR == 0 :
+        image = cv2.imread(path+os.path.split(batch_sample[0])[-1])
+        angle = float(batch_sample[3])
+    # Left
+    elif diceLCR == 1 :
+        image = cv2.imread(path+os.path.split(batch_sample[1])[-1])
+        angle = float(batch_sample[3])+df.AngleOffset
+    # Right
+    elif diceLCR == 2:
+        image = cv2.imread(path+os.path.split(batch_sample[2])[-1])
+        angle = float(batch_sample[3])-df.AngleOffset
+    else:
+        print("Error happend.")
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    image, angle = process_image(image, angle)
+    return image,angle
+#implement some extra random conditions
+#https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9#.1zm9bk6xi
+def process_image(image, angle):
+    # for ru
+    image = random_bright(image)
+    image, angle = random_flip(image, angle)
+    return image,angle
+def random_bright(image):
+     res = cv2.cvtColor(image,cv2.COLOR_RGB2HSV)
+     random_brightness =np.random.uniform(df.RandomBrightOffset,1+df.RandomBrightOffset)
+     res[:,:,2] = np.minimum(res[:,:,2]*random_brightness, 255)
+     res = cv2.cvtColor(res,cv2.COLOR_HSV2RGB)
+     return res
+def random_flip(image, angle):
+    if (np.random.rand() < df.FilpProb):
+        image = cv2.flip(image,1)
+        angle = angle*-1.0
+    return image,angle
