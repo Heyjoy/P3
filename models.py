@@ -1,5 +1,5 @@
 #import math
-import datafiled as df
+import datafield as df
 import tensorflow as tf
 
 from utils import *
